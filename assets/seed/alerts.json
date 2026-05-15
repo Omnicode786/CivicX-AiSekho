@@ -1,0 +1,5 @@
+[
+ {"title":"Flood Emergency - Gulshan-e-Iqbal","message":"Flood emergency reported in Gulshan-e-Iqbal, Karachi. Avoid University Road, NIPA, and nearby low-lying roads. Rescue teams are on the way.","language":"English","severity":"HIGH","location":"Gulshan-e-Iqbal, Karachi","status":"Sent"},
+ {"title":"گلشن اقبال میں سیلابی صورتحال","message":"گلشن اقبال کراچی میں سیلابی صورتحال رپورٹ ہوئی ہے۔ یونیورسٹی روڈ، نیپا اور قریبی نشیبی راستوں سے گریز کریں۔","language":"Urdu","severity":"HIGH","location":"Gulshan-e-Iqbal, Karachi","status":"Sent"},
+ {"title":"Gulshan Flood Alert","message":"Gulshan-e-Iqbal Karachi mein flooding report hui hai. University Road aur NIPA se parhez karein. Rescue teams raaste mein hain.","language":"Roman Urdu","severity":"HIGH","location":"Gulshan-e-Iqbal, Karachi","status":"Sent"}
+]

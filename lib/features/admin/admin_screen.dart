@@ -1,0 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import '../../core/widgets/civix_widgets.dart';
+import '../../core/theme/app_theme.dart';
+
+class AdminScreen extends StatelessWidget{const AdminScreen({super.key});@override Widget build(BuildContext context)=>GradientShell(child:Scaffold(appBar:AppBar(title:const Text('Admin Control Panel'),backgroundColor:Colors.transparent),body:ListView(padding:const EdgeInsets.all(16),children:[const GlassCard(child:Text('Authority controls update Firestore state and are visible live across the app.',style:TextStyle(color:CivixColors.muted))),const SizedBox(height:16),...['Dispatch Ambulance','Dispatch Fire Unit','Notify Police','Send Public Alert','Activate Evacuation','Mark Road Closed','Resolve Latest Crisis'].map((a)=>Padding(padding:const EdgeInsets.only(bottom:12),child:NeonButton(label:a,icon:Icons.admin_panel_settings,onTap:()async{if(a=='Resolve Latest Crisis'){final q=await FirebaseFirestore.instance.collection('crisis_reports').orderBy('reportedAt',descending:true).limit(1).get();if(q.docs.isNotEmpty){await q.docs.first.reference.update({'status':'Resolved'});}} if(context.mounted){ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('$a command executed.')));}})))])));}

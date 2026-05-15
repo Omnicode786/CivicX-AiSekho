@@ -1,0 +1,8 @@
+[
+ {"crisisId":"karachi_gulshan_flood","agentName":"Signal Agent","status":"Completed","confidence":98,"summary":"Collected live citizen complaint, nearby reports, rainfall, and traffic slowdown signals.","reasoningPoints":["Citizen report received","37 nearby complaints found","Rainfall intensity high","Traffic slowdown detected near NIPA"]},
+ {"crisisId":"karachi_gulshan_flood","agentName":"Detection Agent","status":"Completed","confidence":92,"summary":"Detected Urban Flood Emergency with 92% confidence.","reasoningPoints":["Heavy rainfall signal matched","Road blockage keywords found","Multiple local reports support flooding"]},
+ {"crisisId":"karachi_gulshan_flood","agentName":"Severity Agent","status":"Completed","confidence":89,"summary":"Classified risk as HIGH with 3.2km affected radius.","reasoningPoints":["7 blocked roads","18,500 people potentially affected","Arterial routes impacted"]},
+ {"crisisId":"karachi_gulshan_flood","agentName":"Planning Agent","status":"Completed","confidence":91,"summary":"Generated rerouting, rescue dispatch, alert, and drainage response plan.","reasoningPoints":["Reroute from University Road","Dispatch Rescue 1122","Notify Traffic Police East","Alert citizens within 3.2km"]},
+ {"crisisId":"karachi_gulshan_flood","agentName":"Dispatch Agent","status":"Completed","confidence":86,"summary":"Simulated ambulance and rescue routes.","reasoningPoints":["ETA improved from 22 to 9 minutes","Emergency units assigned","Evacuation zone created"]},
+ {"crisisId":"karachi_gulshan_flood","agentName":"Analytics Agent","status":"Completed","confidence":88,"summary":"Measured projected impact after response plan.","reasoningPoints":["Congestion reduced by 41%","ETA improved by 28%","12,400 people alerted"]}
+]

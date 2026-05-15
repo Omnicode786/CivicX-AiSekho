@@ -1,0 +1,1 @@
+{"name":"civix-ai-seeder","version":"1.0.0","type":"commonjs","dependencies":{"firebase-admin":"^12.7.0"},"scripts":{"seed":"node seed_firestore.js"}}

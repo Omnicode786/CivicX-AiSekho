@@ -1,0 +1,9 @@
+[
+ {"id":"edhi_01","type":"Ambulance","name":"Edhi Ambulance 01","location":"Gulshan Response Point","status":"Available","etaMinutes":9},
+ {"id":"chhipa_04","type":"Ambulance","name":"Chhipa Ambulance 04","location":"NIPA Station","status":"Assigned","etaMinutes":7},
+ {"id":"rescue_1122_a","type":"Rescue","name":"Rescue 1122 Team A","location":"District East","status":"Assigned","etaMinutes":11},
+ {"id":"fire_03","type":"Fire","name":"Fire Brigade Unit 3","location":"Saddar Fire Station","status":"Assigned","etaMinutes":6},
+ {"id":"traffic_east","type":"Police","name":"Traffic Police Unit East","location":"University Road","status":"Assigned","etaMinutes":5},
+ {"id":"police_15a","type":"Police","name":"Police Mobile 15-A","location":"Gulshan Chowrangi","status":"Available","etaMinutes":8},
+ {"id":"kmc_drainage","type":"Drainage","name":"KMC Drainage Response Team","location":"District East Depot","status":"Assigned","etaMinutes":14}
+]

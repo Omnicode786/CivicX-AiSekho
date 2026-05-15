@@ -1,0 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/widgets/civix_widgets.dart';
+import '../../core/theme/app_theme.dart';
+
+class LoginScreen extends StatelessWidget { const LoginScreen({super.key}); @override Widget build(BuildContext context)=>GradientShell(child:Scaffold(body:SafeArea(child:Padding(padding:const EdgeInsets.all(22),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[const Icon(Icons.shield,size:74,color:CivixColors.cyan),const SizedBox(height:18),Text('City Emergency Access',style:Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight:FontWeight.w800)),const SizedBox(height:20),const GlassCard(child:Column(children:[TextField(decoration:InputDecoration(labelText:'Email')),SizedBox(height:12),TextField(obscureText:true,decoration:InputDecoration(labelText:'Password')),SizedBox(height:12),DropdownMenu(dropdownMenuEntries:[DropdownMenuEntry(value:'Citizen',label:'Citizen'),DropdownMenuEntry(value:'Responder',label:'Responder'),DropdownMenuEntry(value:'Admin',label:'Admin')],initialSelection:'Citizen')])) ,const SizedBox(height:20),NeonButton(label:'Continue as Demo User',icon:Icons.login,onTap:()=>context.go('/app'))])))));}
