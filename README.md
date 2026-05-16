@@ -1,130 +1,252 @@
-# CIVIX AI — Flutter + Firebase Realtime MVP
+# CIVIX AI
 
-**CIVIX AI** is an Android-first Flutter MVP for an AI-powered smart city crisis intelligence and emergency response system built for Pakistan.
+CIVIX AI is an Android-first Flutter MVP for smart city crisis intelligence and emergency response in Pakistan. The app presents a Karachi command center where citizen reports, crisis records, emergency alerts, agent reasoning, simulations, analytics, and admin actions update through Firebase Cloud Firestore in real time.
 
-This version is **Firebase-backed** and intentionally does **not use in-app mock lists**. The dashboard, map, alerts, agents, analytics, and simulation screens read from **Firestore live streams**. Seed data is provided so developers can populate Firebase with realistic Pakistan-focused realtime demo data.
+The project is built as a demoable civic-tech prototype. It does not call a paid AI model yet. Instead, it uses deterministic, AI-style logic in the Flutter app to classify crisis reports, create multi-agent reasoning records, generate public alerts, and write simulation outcomes to Firestore so the whole interface behaves like a live emergency operations system.
 
----
+## What This Project Does
 
-## What is included
+CIVIX AI helps demonstrate how a city authority could receive crisis reports, detect the type and severity of the event, coordinate response agents, alert citizens, and visualize the city state.
 
-- Flutter Android-first app
-- Dark futuristic government-grade UI
-- Firebase Core + Cloud Firestore integration
-- Realtime Firestore streams for crisis data
-- Crisis reporting screen that writes live Firestore records
-- AI agent workflow panel
-- AI reasoning screen
-- Emergency simulation screen
-- Realtime alert center
-- Analytics dashboard
-- Admin control panel
-- Pakistan/Karachi-focused seed data
-- Firestore seed script using Firebase Admin SDK
-- Firestore security rules starter file
+Main capabilities:
 
----
+- Shows a realtime Karachi command center dashboard.
+- Streams crisis reports from Firestore.
+- Displays high-priority crisis metrics such as active crises, high-priority incidents, people at risk, and blocked roads.
+- Provides a live crisis map visualization driven by Firestore crisis records.
+- Lets a demo user submit a crisis report.
+- Auto-detects basic crisis types such as flood, fire, and general urban crisis from report text.
+- Writes submitted reports to Firestore.
+- Generates multi-agent reasoning records for each submitted report.
+- Generates English, Urdu, and Roman Urdu alert records.
+- Generates an emergency simulation result comparing before-AI and after-AI response metrics.
+- Displays the latest crisis agent workflow.
+- Shows detailed reasoning steps for each agent.
+- Shows emergency simulation impact metrics.
+- Provides an analytics dashboard with aggregate crisis KPIs.
+- Provides a basic admin panel where authority actions can be triggered.
+- Includes seed data and a Node.js seeding script for a realistic Karachi demo dataset.
 
-## Important note about Firebase
+## Product Concept
 
-A ZIP file cannot include your private Firebase project credentials or Android `google-services.json` file. You must connect your own Firebase project before running.
+The app is designed as an agentic smart city operating system:
 
-The app is ready for Firebase, but you need to add:
+1. A citizen, responder, traffic feed, or city sensor reports a problem.
+2. CIVIX AI records the crisis in Firestore.
+3. A signal agent gathers local context.
+4. A detection agent classifies the crisis.
+5. A severity agent estimates risk.
+6. A planning agent proposes response actions.
+7. A dispatch agent simulates resource movement and ETA improvements.
+8. An alert agent prepares multilingual citizen alerts.
+9. Dashboards, map, alerts, simulation, and analytics update live.
+
+In the current MVP, steps 3 through 8 are simulated locally in Dart. The Firestore data shape is already prepared for replacing that logic with a backend AI orchestration layer later.
+
+## Tech Stack
+
+- Flutter
+- Dart SDK 3.4+
+- Firebase Core
+- Cloud Firestore
+- Firebase Auth dependency included, but login is currently demo-only
+- go_router for navigation
+- provider for dependency injection
+- google_fonts for typography
+- flutter_animate for splash animation
+- fl_chart for analytics charts
+- uuid for report IDs
+- Node.js Firebase Admin SDK for Firestore seeding
+
+## App Structure
+
+```text
+lib/
+  main.dart                         App entry point and Firebase init
+  router/app_router.dart            go_router route table
+  core/theme/app_theme.dart         Dark CIVIX visual theme
+  core/widgets/civix_widgets.dart   Shared UI widgets
+  data/models/models.dart           Firestore model classes
+  data/services/firestore_service.dart
+                                    Firestore streams and MVP report logic
+  features/
+    splash/                         Animated splash screen
+    onboarding/                     Product onboarding
+    auth/                           Demo login screen
+    home/                           Main shell and command dashboard
+    map/                            Live crisis map visualization
+    report/                         Crisis report submission
+    agents/                         Latest crisis agent workflow
+    reasoning/                      Per-crisis agent reasoning details
+    simulation/                     Emergency response simulation
+    analytics/                      Aggregate crisis analytics
+    alerts/                         Realtime alert center
+    admin/                          Authority action panel
+
+assets/seed/                        Demo Firestore seed data
+scripts/seed_firestore.js           Firebase Admin seeding script
+firestore.rules                     Starter Firestore rules
+pubspec.yaml                        Flutter dependencies and assets
+```
+
+## Navigation Flow
+
+Routes are defined in `lib/router/app_router.dart`.
+
+```text
+/                    Splash screen
+/onboarding          Onboarding screens
+/login               Demo login
+/app                 Main bottom-tab app shell
+/reasoning/:id       Agent reasoning for a crisis
+/simulation/:id      Simulation result for a crisis
+/analytics           Analytics dashboard
+/admin               Admin control panel
+```
+
+The main app shell has these bottom tabs:
+
+- Home
+- Map
+- Report
+- Agents
+- Alerts
+
+## Firestore Collections
+
+The app expects these Firestore collections:
+
+```text
+crisis_reports
+crisis_reports/{crisisId}/agent_results
+alerts
+emergency_units
+simulation_results
+```
+
+### `crisis_reports/{id}`
+
+Stores each crisis or emergency event.
+
+Important fields:
+
+- `title`
+- `description`
+- `type`
+- `locationName`
+- `latitude`
+- `longitude`
+- `severity`
+- `confidence`
+- `status`
+- `reportedAt`
+- `reportedBy`
+- `affectedRadiusKm`
+- `peopleAtRisk`
+- `blockedRoads`
+
+### `crisis_reports/{id}/agent_results/{agentResultId}`
+
+Stores AI-style reasoning steps for a specific crisis.
+
+Important fields:
+
+- `agentName`
+- `status`
+- `confidence`
+- `summary`
+- `reasoningPoints`
+- `timestamp`
+
+### `alerts/{id}`
+
+Stores citizen-facing alert messages.
+
+Important fields:
+
+- `crisisId`
+- `language`
+- `title`
+- `message`
+- `severity`
+- `location`
+- `status`
+- `createdAt`
+
+### `emergency_units/{id}`
+
+Stores emergency resources.
+
+Important fields:
+
+- `type`
+- `name`
+- `location`
+- `status`
+- `etaMinutes`
+
+### `simulation_results/{crisisId}`
+
+Stores before-and-after response simulation metrics.
+
+Important fields:
+
+- `beforeCongestion`
+- `afterCongestion`
+- `beforeEta`
+- `afterEta`
+- `peopleAtRisk`
+- `peopleAlerted`
+- `congestionReduction`
+- `etaImprovement`
+- `rescueCoverageImprovement`
+
+## Seed Data
+
+The repo includes Pakistan/Karachi-focused demo data in `assets/seed/`.
+
+Seed files:
+
+- `crisis_reports.json`
+- `emergency_units.json`
+- `alerts.json`
+- `simulation_results.json`
+- `agent_results.json`
+
+The default dataset includes incidents such as:
+
+- Gulshan-e-Iqbal urban flood
+- Saddar fire incident
+- Shahrah-e-Faisal road accident
+- Clifton medical emergency
+- NIPA road blockage
+- North Nazimabad power infrastructure failure
+
+## Setup
+
+This project does not include private Firebase files. You need to connect your own Firebase project before running the app.
+
+Required generated files:
 
 ```text
 android/app/google-services.json
 lib/firebase_options.dart
 ```
 
-The easiest way is using FlutterFire CLI.
-
----
-
-## Prerequisites
-
-Install:
-
-- Flutter latest stable
-- Android Studio or Android SDK
-- Node.js LTS
-- Firebase CLI
-- FlutterFire CLI
-
-Check Flutter:
+Install dependencies:
 
 ```bash
-flutter doctor
+flutter pub get
 ```
 
-Install Firebase CLI:
-
-```bash
-npm install -g firebase-tools
-firebase login
-```
-
-Install FlutterFire CLI:
+Configure Firebase:
 
 ```bash
 dart pub global activate flutterfire_cli
-```
-
----
-
-## Setup steps
-
-### 1. Extract the ZIP
-
-```bash
-unzip civix_ai_realtime_flutter.zip
-cd civix_ai_realtime
-```
-
-### 2. Generate Flutter platform folders if needed
-
-If the extracted project does not contain full Android/iOS platform folders, run:
-
-```bash
-flutter create .
-```
-
-This keeps the existing `lib/`, `pubspec.yaml`, assets, and scripts.
-
-### 3. Create Firebase project
-
-Go to Firebase Console and create a project, for example:
-
-```text
-civix-ai-demo
-```
-
-Enable:
-
-- Firestore Database
-- Authentication, optional for demo
-
-For demo testing, you may enable anonymous/email authentication or temporarily use test rules.
-
-### 4. Configure FlutterFire
-
-From the project root:
-
-```bash
 flutterfire configure
 ```
 
-Choose your Firebase project and Android app.
-
-This generates:
-
-```text
-lib/firebase_options.dart
-android/app/google-services.json
-```
-
-### 5. Update `lib/main.dart` if FlutterFire generated options
-
-If `flutterfire configure` generates `firebase_options.dart`, replace Firebase initialization in `lib/main.dart` with:
+If `flutterfire configure` creates `lib/firebase_options.dart`, update `lib/main.dart` to initialize Firebase with generated options:
 
 ```dart
 import 'firebase_options.dart';
@@ -134,43 +256,31 @@ await Firebase.initializeApp(
 );
 ```
 
-Current code uses:
+The current code uses:
 
 ```dart
 await Firebase.initializeApp();
 ```
 
-That works on Android after `google-services.json` is added, but FlutterFire options are cleaner.
+That can work for Android after `android/app/google-services.json` exists, but generated options are cleaner for multi-platform builds.
 
-### 6. Install Flutter dependencies
+## Android Project Note
+
+The repository currently has an `android/app` directory, but it does not appear to contain a full generated Android platform project. If platform files are missing, regenerate them from the project root:
 
 ```bash
-flutter pub get
+flutter create .
 ```
 
----
+This keeps the existing `lib/`, `assets/`, `scripts/`, and `pubspec.yaml` content while restoring Flutter platform scaffolding.
 
-## Seed Firestore with realtime demo data
+## Seeding Firestore
 
-The app reads live Firestore collections. Seed data is inside:
+Create a Firebase service account key in Firebase Console:
 
 ```text
-assets/seed/
+Project Settings > Service accounts > Generate new private key
 ```
-
-Collections seeded:
-
-```text
-crisis_reports
-emergency_units
-alerts
-simulation_results
-crisis_reports/{crisisId}/agent_results
-```
-
-### 1. Generate Firebase service account key
-
-Firebase Console → Project Settings → Service accounts → Generate new private key.
 
 Save it as:
 
@@ -178,16 +288,16 @@ Save it as:
 scripts/serviceAccountKey.json
 ```
 
-Never commit this file publicly.
+Do not commit that file.
 
-### 2. Install seeder dependencies
+Install seeder dependencies:
 
 ```bash
 cd scripts
 npm install
 ```
 
-### 3. Run seed script
+Run the seed script:
 
 ```bash
 npm run seed
@@ -199,254 +309,129 @@ Expected output:
 CIVIX AI Firestore seed completed successfully.
 ```
 
----
+The script writes seed data to:
 
-## Run the app
+- `crisis_reports`
+- `emergency_units`
+- `alerts`
+- `simulation_results`
+- `crisis_reports/{crisisId}/agent_results`
 
-From project root:
+## Running The App
+
+From the project root:
 
 ```bash
 flutter run
 ```
 
-For Android release build:
+For a release APK:
 
 ```bash
 flutter build apk --release
 ```
 
----
+## Demo Walkthrough
 
-## Firestore data model
-
-### `crisis_reports/{id}`
-
-```json
-{
-  "title": "Urban Flood Emergency",
-  "description": "Gulshan mein flooding ho rahi hai aur roads block hain.",
-  "type": "Urban Flood Emergency",
-  "locationName": "Gulshan-e-Iqbal, Karachi",
-  "latitude": 24.9202,
-  "longitude": 67.0886,
-  "severity": "HIGH",
-  "confidence": 92,
-  "status": "Response in Progress",
-  "reportedAt": "Timestamp",
-  "reportedBy": "Citizen App",
-  "affectedRadiusKm": 3.2,
-  "peopleAtRisk": 18500,
-  "blockedRoads": 7
-}
-```
-
-### `crisis_reports/{id}/agent_results/{agentResultId}`
-
-```json
-{
-  "agentName": "Detection Agent",
-  "status": "Completed",
-  "confidence": 92,
-  "summary": "Detected Urban Flood Emergency with 92% confidence.",
-  "reasoningPoints": ["Heavy rainfall signal matched", "Road blockage keywords found"],
-  "timestamp": "Timestamp"
-}
-```
-
-### `alerts/{id}`
-
-```json
-{
-  "crisisId": "karachi_gulshan_flood",
-  "language": "English",
-  "title": "Flood Emergency - Gulshan-e-Iqbal",
-  "message": "Flood emergency reported in Gulshan-e-Iqbal...",
-  "severity": "HIGH",
-  "location": "Gulshan-e-Iqbal, Karachi",
-  "status": "Sent",
-  "createdAt": "Timestamp"
-}
-```
-
-### `simulation_results/{crisisId}`
-
-```json
-{
-  "beforeCongestion": 87,
-  "afterCongestion": 51,
-  "beforeEta": 22,
-  "afterEta": 9,
-  "peopleAtRisk": 18500,
-  "peopleAlerted": 12400,
-  "congestionReduction": 41,
-  "etaImprovement": 28,
-  "rescueCoverageImprovement": 35
-}
-```
-
-### `emergency_units/{id}`
-
-```json
-{
-  "type": "Ambulance",
-  "name": "Edhi Ambulance 01",
-  "location": "Gulshan Response Point",
-  "status": "Available",
-  "etaMinutes": 9
-}
-```
-
----
-
-## Main demo flow
-
-1. Seed Firestore.
-2. Run app.
-3. Continue as Demo User.
-4. Home dashboard shows Karachi high-alert data from Firestore.
-5. Open Map to see live crisis markers from Firestore.
-6. Go to Report screen.
-7. Submit:
+1. Configure Firebase.
+2. Seed Firestore.
+3. Run the Flutter app.
+4. Wait for the splash screen to move to onboarding.
+5. Continue through onboarding.
+6. Select `Continue as Demo User`.
+7. Review the Karachi command dashboard.
+8. Open the Map tab to see crisis markers.
+9. Open the Report tab.
+10. Submit the default flood report:
 
 ```text
 Gulshan mein flooding ho rahi hai aur roads block hain.
 ```
 
-8. The app writes a new Firestore crisis report.
-9. Agent results, multilingual alerts, and simulation results are generated as Firestore records.
-10. AI Reasoning and Simulation screens display the generated realtime records.
+11. The app writes a new crisis to Firestore.
+12. The app creates agent reasoning, alert, and simulation records.
+13. The reasoning screen opens for the new crisis.
+14. Open the simulation screen to see response improvements.
+15. Open Alerts to see generated public alerts.
 
----
+## Current MVP AI Logic
 
-## Current MVP AI behavior
-
-The MVP uses local deterministic AI-style processing in `FirestoreService.submitReport()` to generate Firestore records.
-
-It detects crisis type using keywords such as:
-
-- `flood`, `pani`, `barish`, `block`
-- `fire`, `aag`, `smoke`
-- `accident`, `ambulance`, `injured`
-
-Then it writes:
-
-- Crisis report
-- Agent reasoning records
-- Simulation result
-- English alert
-- Urdu alert
-- Roman Urdu alert
-
-This keeps the MVP demo reliable and realtime without requiring paid AI API calls.
-
----
-
-## How to connect Gemini / Google Antigravity later
-
-Replace the deterministic logic inside:
+The main MVP logic lives in:
 
 ```text
 lib/data/services/firestore_service.dart
 ```
 
-Specifically:
+`submitReport()` does the following:
 
-```dart
-submitReport()
-_agentSeed()
-_alerts()
-```
+- Creates a UUID for the report.
+- Checks report text for keywords.
+- Detects flood from words such as `flood`, `pani`, `barish`, and `block`.
+- Detects fire from words such as `fire`, `aag`, and `smoke`.
+- Falls back to `Urban Crisis` for unknown reports.
+- Assigns severity and confidence.
+- Writes a `crisis_reports` document.
+- Writes agent result documents under the crisis.
+- Writes a `simulation_results` document.
+- Writes multilingual alert documents.
 
-Recommended production flow:
+This gives the prototype a reliable demo flow without needing a backend server or paid AI API calls.
+
+## Current Limitations
+
+- Authentication is demo-only. The login screen does not sign in with Firebase Auth yet.
+- Report image and voice buttons are placeholders.
+- The live map is a custom city-grid visualization, not Google Maps.
+- Admin actions mostly show confirmation snackbars. Only `Resolve Latest Crisis` updates Firestore.
+- Firestore rules currently require `request.auth != null`, but the demo login does not authenticate. For local demos you must either add real auth or use suitable temporary demo rules.
+- The app writes generated alerts for flood-oriented copy even when some non-flood crisis types are submitted.
+- Some existing seed strings contain mojibake where Urdu text was incorrectly encoded before this README cleanup.
+- No automated tests are included yet.
+- No backend orchestration service is included yet.
+
+## Suggested Production Architecture
+
+The current Firestore data shape can support a real AI/backend pipeline later:
 
 ```text
 Flutter App
-   ↓
-FastAPI Backend
-   ↓
-Google Antigravity Orchestration Layer
-   ↓
-Signal Agent
-Detection Agent
-Severity Agent
-Planning Agent
-Dispatch Agent
-Alert Agent
-Analytics Agent
-   ↓
-Gemini API
-   ↓
-Firestore
-   ↓
-Flutter realtime streams
+  -> API Backend
+  -> AI Orchestration Layer
+  -> Signal Agent
+  -> Detection Agent
+  -> Severity Agent
+  -> Planning Agent
+  -> Dispatch Agent
+  -> Alert Agent
+  -> Analytics Agent
+  -> Firestore
+  -> Flutter realtime streams
 ```
 
----
+Possible next production upgrades:
 
-## Firestore security rules
+- Add real Firebase Authentication and role-based access.
+- Move `submitReport()` AI generation into a secure backend.
+- Replace deterministic keyword detection with Gemini or another model.
+- Add Google Maps or another GIS provider.
+- Store real emergency unit dispatch state.
+- Add push notifications for alerts.
+- Add Firestore indexes and stricter security rules.
+- Add tests for model parsing, service writes, and UI flows.
+- Fix encoded Urdu seed text.
 
-A starter rules file is included:
+## Key Files For Future Work
 
-```text
-firestore.rules
-```
+- `lib/data/services/firestore_service.dart`: Most important file for data flow and MVP AI behavior.
+- `lib/data/models/models.dart`: Firestore document parsing models.
+- `lib/features/report/report_screen.dart`: Crisis submission flow.
+- `lib/features/reasoning/reasoning_screen.dart`: Per-crisis agent trace.
+- `lib/features/simulation/simulation_screen.dart`: Simulation metrics UI.
+- `lib/features/admin/admin_screen.dart`: Authority command actions.
+- `scripts/seed_firestore.js`: Firestore seed loader.
+- `assets/seed/`: Demo data source.
+- `firestore.rules`: Starter Firestore rules.
 
-For quick authenticated testing:
+## Quick Project Memory
 
-```text
-allow read, write: if request.auth != null;
-```
-
-For hackathon-only testing, Firebase Console test mode can be used temporarily, but do not ship production apps with public write access.
-
----
-
-## Files to customize
-
-### Theme
-
-```text
-lib/core/theme/app_theme.dart
-```
-
-### Common UI widgets
-
-```text
-lib/core/widgets/civix_widgets.dart
-```
-
-### Firestore streams and write logic
-
-```text
-lib/data/services/firestore_service.dart
-```
-
-### Seed data
-
-```text
-assets/seed/
-```
-
-### Screens
-
-```text
-lib/features/
-```
-
----
-
-## Notes for developer
-
-- This project uses Firestore realtime streams; the app UI updates when Firestore changes.
-- No private Firebase keys are included.
-- No Google Maps API key is included. The current map screen is a premium realtime city-grid visualization driven by Firestore crisis data.
-- To add real Google Maps later, replace `LiveMapScreen` with `google_maps_flutter` and use `latitude`, `longitude`, and `affectedRadiusKm` from Firestore.
-- The seed script uses Firebase Admin SDK and must only run locally or from a secure backend environment.
-
----
-
-## Hackathon pitch
-
-CIVIX AI is not just an alert app. It is an agentic smart city operating system that detects crises, reasons through severity, plans emergency actions, simulates response execution, and updates the city state in real time.
-
-Built for Pakistan’s urban challenges, CIVIX AI helps cities respond faster to floods, fires, accidents, medical emergencies, infrastructure failures, and public safety threats.
+Remember this project as a Flutter/Firebase realtime emergency-response MVP named CIVIX AI. It is focused on Pakistan/Karachi smart city crisis intelligence. Firestore is the source of truth. The app streams crisis reports, alerts, agent results, emergency units, and simulations. The current "AI" is deterministic Dart logic in `FirestoreService.submitReport()`, not an external model. The main future work is to add real Firebase Auth, move AI orchestration to a backend, replace the custom map with real maps, clean encoded Urdu seed text, and harden Firestore rules.
